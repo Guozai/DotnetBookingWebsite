@@ -21,7 +21,8 @@ namespace ASRSystem
                 try
                 {
                     services.GetRequiredService<AsrContext>().Database.Migrate();
-                    //SeedData.Initialise(services);
+                    // Seed the database
+                    SeedData.InitialiseAsync(services).Wait();
                 }
                 catch (Exception e)
                 {
