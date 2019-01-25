@@ -31,8 +31,8 @@ namespace ASRSystem
             services.AddDbContext<AsrContext>(options =>
                 options.UseLazyLoadingProxies().UseSqlServer(Configuration.GetConnectionString(nameof(AsrContext))));
 
-            // Add default identities
-            services.AddDefaultIdentity<User>(options =>
+            // Add identities
+            services.AddIdentity<User, IdentityRole>(options =>
             {
                 options.Password.RequiredLength = 3;
                 options.Password.RequireDigit = options.Password.RequireNonAlphanumeric =
