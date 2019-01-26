@@ -1,36 +1,31 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using Asr.Data;
 using Microsoft.AspNetCore.Authorization;
-using ASRSystem.Models;
+using Asr.Models;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 
-namespace ASRSystem.Areas.Identity.Pages.Account
+namespace Asr.Areas.Identity.Pages.Account
 {
     [AllowAnonymous]
     public class RegisterModel : PageModel
     {
-        private readonly SignInManager<User> _signInManager;
-        private readonly UserManager<User> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
-        private readonly IEmailSender _emailSender;
+        private readonly AsrContext _context;
 
-        public RegisterModel(
-            UserManager<User> userManager,
-            SignInManager<User> signInManager,
-            ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+        public RegisterModel(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager,
+            ILogger<RegisterModel> logger, AsrContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
-            _emailSender = emailSender;
+            _context = context;
         }
 
         [BindProperty]
@@ -43,7 +38,13 @@ namespace ASRSystem.Areas.Identity.Pages.Account
             [Required]
             [EmailAddress]
             [Display(Name = "Email")]
+            [RegularExpression(@"^s\d{7}@student.rmit.edu.au|e\d{5}@rmit.edu.au$",
+                ErrorMessage = "Email address is not in a valid format.")]
             public string Email { get; set; }
+
+            [Required]
+            [Display(Name = "Name")]
+            public string Name { get; set; }
 
             [Required]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
@@ -65,28 +66,40 @@ namespace ASRSystem.Areas.Identity.Pages.Account
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             returnUrl = returnUrl ?? Url.Content("~/");
-            if (ModelState.IsValid)
+            if(ModelState.IsValid)
             {
-                var user = new User { UserName = Input.Email, Email = Input.Email };
-                var result = await _userManager.CreateAsync(user, Input.Password);
-                if (result.Succeeded)
+                var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email };
+                var id = Input.Email.Substring(0, Input.Email.IndexOf('@'));
+                if(id.StartsWith('e'))
                 {
+                    if(await _context.Staff.FindAsync(id) == null)
+                        await _context.Staff.AddAsync(new Staff { StaffID = id, Email = Input.Email, Name = Input.Name });
+                    user.StaffID = id;
+                }
+                else if(id.StartsWith('s'))
+                {
+                    if(await _context.Student.FindAsync(id) == null)
+                        await _context.Student.AddAsync(new Student { StudentID = id, Email = Input.Email, Name = Input.Name });
+                    user.StudentID = id;
+                }
+                else
+                    throw new Exception();
+                await _context.SaveChangesAsync();
+
+                var result = await _userManager.CreateAsync(user, Input.Password);
+
+                if(result.Succeeded)
+                {
+                    await _userManager.AddToRoleAsync(user, id.StartsWith('e') ? Constants.StaffRole :
+                        id.StartsWith('s') ? Constants.StudentRole : throw new Exception());
+
                     _logger.LogInformation("User created a new account with password.");
 
-                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    var callbackUrl = Url.Page(
-                        "/Account/ConfirmEmail",
-                        pageHandler: null,
-                        values: new { userId = user.Id, code = code },
-                        protocol: Request.Scheme);
+                    await _signInManager.SignInAsync(user, false);
 
-                    await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
-
-                    await _signInManager.SignInAsync(user, isPersistent: false);
                     return LocalRedirect(returnUrl);
                 }
-                foreach (var error in result.Errors)
+                foreach(var error in result.Errors)
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
                 }

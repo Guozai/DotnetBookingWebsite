@@ -1,12 +1,12 @@
 ﻿using System;
-using ASRSystem.Data;
+using Asr.Data;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-namespace ASRSystem
+namespace Asr
 {
     public class Program
     {
@@ -14,17 +14,16 @@ namespace ASRSystem
         {
             var host = CreateWebHostBuilder(args).Build();
 
-            using (var scope = host.Services.CreateScope())
+            using(var scope = host.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
 
                 try
                 {
                     services.GetRequiredService<AsrContext>().Database.Migrate();
-                    // Seed the database
                     SeedData.InitialiseAsync(services).Wait();
                 }
-                catch (Exception e)
+                catch(Exception e)
                 {
                     var logger = services.GetRequiredService<ILogger<Program>>();
                     logger.LogError(e, "An error occurred seeding the DB.");
@@ -34,8 +33,7 @@ namespace ASRSystem
             host.Run();
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>();
+        private static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
+            WebHost.CreateDefaultBuilder(args).UseStartup<Startup>();
     }
 }

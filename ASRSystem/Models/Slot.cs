@@ -1,9 +1,7 @@
-﻿// Model copied from Matthew Bolger's model of Week7 example code
-
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace ASRSystem.Models
+namespace Asr.Models
 {
     public class Slot
     {

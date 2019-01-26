@@ -1,8 +1,6 @@
-﻿// Constant copied from Matthew Bolger's Week8 example code 'OAuthExample'
-
-namespace ASRSystem.Data
+﻿namespace Asr.Data
 {
-    public class Constants
+    public static class Constants
     {
         public const string StaffRole = "Staff";
         public const string StudentRole = "Student";

@@ -1,15 +1,15 @@
 ﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using ASRSystem.Data;
-using ASRSystem.Models;
+using Asr.Data;
+using Asr.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace ASRSystem
+namespace Asr
 {
     public class Startup
     {
@@ -27,24 +27,15 @@ namespace ASRSystem
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            // Connection string
             services.AddDbContext<AsrContext>(options =>
                 options.UseLazyLoadingProxies().UseSqlServer(Configuration.GetConnectionString(nameof(AsrContext))));
 
-            // Add identities
-            services.AddIdentity<User, IdentityRole>(options =>
+            services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
                 options.Password.RequiredLength = 3;
                 options.Password.RequireDigit = options.Password.RequireNonAlphanumeric =
                     options.Password.RequireUppercase = options.Password.RequireLowercase = false;
             }).AddDefaultUI().AddEntityFrameworkStores<AsrContext>().AddDefaultTokenProviders();
-
-            // Add google login
-            services.AddAuthentication().AddGoogle(googleOptions =>
-            {
-                googleOptions.ClientId = Configuration["Authentication:Google:ClientId"];
-                googleOptions.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
-            });
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
@@ -52,10 +43,9 @@ namespace ASRSystem
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            if (env.IsDevelopment())
+            if(env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                // This line is added later by Mathew
                 app.UseDatabaseErrorPage();
             }
             else
@@ -66,18 +56,11 @@ namespace ASRSystem
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            // Disable this line to disable cookie
             //app.UseCookiePolicy();
 
-            // Use Authentication when login
             app.UseAuthentication();
 
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
-            });
+            app.UseMvc(routes => routes.MapRoute("default", "{controller=Home}/{action=Index}/{id?}"));
         }
     }
 }

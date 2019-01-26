@@ -1,11 +1,9 @@
-﻿// Model copied from Matthew Bolger's model of Week7 example code
-
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 
 namespace Asr.Models
 {
-    // Add profile data for users by adding properties to the User class
-    public class User : IdentityUser
+    // Add profile data for application users by adding properties to the ApplicationUser class
+    public class ApplicationUser : IdentityUser
     {
         public string StaffID { get; set; }
         public virtual Staff Staff { get; set; }

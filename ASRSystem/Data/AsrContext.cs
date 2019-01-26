@@ -1,10 +1,10 @@
-﻿using ASRSystem.Models;
+﻿using Asr.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace ASRSystem.Data
+namespace Asr.Data
 {
-    public class AsrContext : IdentityDbContext<User>
+    public class AsrContext : IdentityDbContext<ApplicationUser>
     {
         public AsrContext(DbContextOptions<AsrContext> options) : base(options)
         { }
@@ -17,7 +17,7 @@ namespace ASRSystem.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
+            
             modelBuilder.Entity<Slot>().HasKey(x => new { x.RoomID, x.StartTime });
         }
     }

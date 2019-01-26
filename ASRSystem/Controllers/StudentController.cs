@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ASRSystem.Data;
+using Asr.Data;
 
 namespace ASRSystem.Controllers
 {

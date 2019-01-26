@@ -2,18 +2,18 @@
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading.Tasks;
-using ASRSystem.Models;
+using Asr.Models;
 using Microsoft.AspNetCore.Identity;
 
-namespace ASRSystem.Data
+namespace Asr.Data
 {
     public static class SeedData
     {
         public static async Task InitialiseAsync(IServiceProvider serviceProvider)
         {
-            using (var userManager = serviceProvider.GetRequiredService<UserManager<User>>())
-            using (var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>())
-            using (var context = new AsrContext(serviceProvider.GetRequiredService<DbContextOptions<AsrContext>>()))
+            using(var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>())
+            using(var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>())
+            using(var context = new AsrContext(serviceProvider.GetRequiredService<DbContextOptions<AsrContext>>()))
             {
                 await InitialiseUsersAsync(userManager, roleManager);
                 await InitialiseAsrDataAsync(context, userManager);
@@ -21,12 +21,11 @@ namespace ASRSystem.Data
         }
 
         private static async Task InitialiseUsersAsync(
-            UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
+            UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
-            // This part is changed from foreach (var role in roles) in Week8 example
-            foreach (var role in new[] { Constants.StaffRole, Constants.StudentRole })
+            foreach(var role in new[] { Constants.StaffRole, Constants.StudentRole })
             {
-                if (!await roleManager.RoleExistsAsync(role))
+                if(!await roleManager.RoleExistsAsync(role))
                     await roleManager.CreateAsync(new IdentityRole { Name = role });
             }
 
@@ -37,25 +36,25 @@ namespace ASRSystem.Data
         }
 
         private static async Task CreateUserAndEnsureUserHasRoleAsync(
-            UserManager<User> userManager, string userName, string role)
+            UserManager<ApplicationUser> userManager, string userName, string role)
         {
-            if (await userManager.FindByNameAsync(userName) == null)
-                await userManager.CreateAsync(new User { UserName = userName, Email = userName }, "abc123");
+            if(await userManager.FindByNameAsync(userName) == null)
+                await userManager.CreateAsync(new ApplicationUser { UserName = userName, Email = userName }, "abc123");
             await EnsureUserHasRoleAsync(userManager, userName, role);
         }
 
         private static async Task EnsureUserHasRoleAsync(
-            UserManager<User> userManager, string userName, string role)
+            UserManager<ApplicationUser> userManager, string userName, string role)
         {
             var user = await userManager.FindByNameAsync(userName);
-            if (user != null && !await userManager.IsInRoleAsync(user, role))
+            if(user != null && !await userManager.IsInRoleAsync(user, role))
                 await userManager.AddToRoleAsync(user, role);
         }
 
-        private static async Task InitialiseAsrDataAsync(AsrContext context, UserManager<User> userManager)
+        private static async Task InitialiseAsrDataAsync(AsrContext context, UserManager<ApplicationUser> userManager)
         {
             // Look for any rooms.
-            if (await context.Room.AnyAsync())
+            if(await context.Room.AnyAsync())
                 return; // DB has been seeded.
 
             await context.Room.AddRangeAsync(
@@ -115,12 +114,12 @@ namespace ASRSystem.Data
             });
         }
 
-        private static async Task UpdateUserAsync(UserManager<User> userManager, string userName, string id)
+        private static async Task UpdateUserAsync(UserManager<ApplicationUser> userManager, string userName, string id)
         {
             var user = await userManager.FindByNameAsync(userName);
-            if (user.UserName.StartsWith('e'))
+            if(user.UserName.StartsWith('e'))
                 user.StaffID = id;
-            if (user.UserName.StartsWith('s'))
+            if(user.UserName.StartsWith('s'))
                 user.StudentID = id;
 
             await userManager.UpdateAsync(user);
