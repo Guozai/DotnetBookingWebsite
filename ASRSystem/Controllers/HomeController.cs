@@ -28,24 +28,19 @@ namespace Asr.Controllers
         
         public async Task<IActionResult> Rooms() => View(await _context.Room.ToListAsync());
 
-        //public IActionResult About()
-        //{
-        //    ViewData["Message"] = "Your application description page.";
+        public IActionResult FAQ()
+        {
+            ViewData["Message"] = "Your application description page.";
 
-        //    return View();
-        //}
+            return View();
+        }
 
-        //public IActionResult Contact()
-        //{
-        //    ViewData["Message"] = "Your contact page.";
+        public IActionResult Sitemap()
+        {
+            ViewData["Message"] = "Your contact page.";
 
-        //    return View();
-        //}
-
-        //public IActionResult Privacy()
-        //{
-        //    return View();
-        //}
+            return View();
+        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error() =>
