@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿// Model copied from Matthew Bolger's model of Week7 example code
+
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 

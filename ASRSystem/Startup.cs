@@ -56,8 +56,10 @@ namespace Asr
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            // Disable this line to disable cookie
             //app.UseCookiePolicy();
 
+            // Use Authentication when login
             app.UseAuthentication();
 
             app.UseMvc(routes => routes.MapRoute("default", "{controller=Home}/{action=Index}/{id?}"));

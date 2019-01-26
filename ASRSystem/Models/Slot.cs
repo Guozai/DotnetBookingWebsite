@@ -1,4 +1,6 @@
-﻿using System;
+﻿// Model copied from Matthew Bolger's model of Week7 example code
+
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Asr.Models
