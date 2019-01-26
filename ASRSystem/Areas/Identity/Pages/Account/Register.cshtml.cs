@@ -14,12 +14,12 @@ namespace Asr.Areas.Identity.Pages.Account
     [AllowAnonymous]
     public class RegisterModel : PageModel
     {
-        private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<User> _signInManager;
+        private readonly UserManager<User> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly AsrContext _context;
 
-        public RegisterModel(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager,
+        public RegisterModel(UserManager<User> userManager, SignInManager<User> signInManager,
             ILogger<RegisterModel> logger, AsrContext context)
         {
             _userManager = userManager;
@@ -68,7 +68,7 @@ namespace Asr.Areas.Identity.Pages.Account
             returnUrl = returnUrl ?? Url.Content("~/");
             if(ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email };
+                var user = new User { UserName = Input.Email, Email = Input.Email };
                 var id = Input.Email.Substring(0, Input.Email.IndexOf('@'));
                 if(id.StartsWith('e'))
                 {

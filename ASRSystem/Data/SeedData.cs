@@ -11,7 +11,7 @@ namespace Asr.Data
     {
         public static async Task InitialiseAsync(IServiceProvider serviceProvider)
         {
-            using(var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>())
+            using(var userManager = serviceProvider.GetRequiredService<UserManager<User>>())
             using(var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>())
             using(var context = new AsrContext(serviceProvider.GetRequiredService<DbContextOptions<AsrContext>>()))
             {
@@ -21,7 +21,7 @@ namespace Asr.Data
         }
 
         private static async Task InitialiseUsersAsync(
-            UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+            UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
         {
             foreach(var role in new[] { Constants.StaffRole, Constants.StudentRole })
             {
@@ -36,22 +36,22 @@ namespace Asr.Data
         }
 
         private static async Task CreateUserAndEnsureUserHasRoleAsync(
-            UserManager<ApplicationUser> userManager, string userName, string role)
+            UserManager<User> userManager, string userName, string role)
         {
             if(await userManager.FindByNameAsync(userName) == null)
-                await userManager.CreateAsync(new ApplicationUser { UserName = userName, Email = userName }, "abc123");
+                await userManager.CreateAsync(new User { UserName = userName, Email = userName }, "abc123");
             await EnsureUserHasRoleAsync(userManager, userName, role);
         }
 
         private static async Task EnsureUserHasRoleAsync(
-            UserManager<ApplicationUser> userManager, string userName, string role)
+            UserManager<User> userManager, string userName, string role)
         {
             var user = await userManager.FindByNameAsync(userName);
             if(user != null && !await userManager.IsInRoleAsync(user, role))
                 await userManager.AddToRoleAsync(user, role);
         }
 
-        private static async Task InitialiseAsrDataAsync(AsrContext context, UserManager<ApplicationUser> userManager)
+        private static async Task InitialiseAsrDataAsync(AsrContext context, UserManager<User> userManager)
         {
             // Look for any rooms.
             if(await context.Room.AnyAsync())
@@ -114,7 +114,7 @@ namespace Asr.Data
             });
         }
 
-        private static async Task UpdateUserAsync(UserManager<ApplicationUser> userManager, string userName, string id)
+        private static async Task UpdateUserAsync(UserManager<User> userManager, string userName, string id)
         {
             var user = await userManager.FindByNameAsync(userName);
             if(user.UserName.StartsWith('e'))
