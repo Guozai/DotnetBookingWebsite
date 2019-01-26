@@ -18,12 +18,12 @@ namespace Asr.Controllers
         //}
         public HomeController(AsrContext context) => _context = context;
 
-        //public IActionResult Index() => View();
+        public IActionResult Index() => View();
 
         // Why use async 
         // https://stackoverflow.com/questions/14455293/how-and-when-to-use-async-and-await
-        //public async Task<IActionResult> Slots() => View(await _context.Slot.ToListAsync());
-        public async Task<IActionResult> Index() => View(await _context.Slot.ToListAsync());
+        public async Task<IActionResult> Slots() => View(await _context.Slot.ToListAsync());
+        //public async Task<IActionResult> Index() => View(await _context.Slot.ToListAsync());
             //View(await _context.Slot.Include(s => s.Room).Include(s => s.Staff).Include(s => s.Student).ToListAsync());
         
         public async Task<IActionResult> Rooms() => View(await _context.Room.ToListAsync());

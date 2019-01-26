@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ASR</title>
+    <title>ASR System</title>
 
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
@@ -26,12 +26,20 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">ASR</a>
+                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">ASR System</a>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="Rooms">Rooms</a></li>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li><a asp-area="" asp-controller="Home" asp-action="Slots">Slots</a></li>
+                        <li><a asp-area="" asp-controller="Staff" asp-action="Index">Staff Menu</a></li>
+                        <li><a asp-area="" asp-controller="Student" asp-action="Index">Student Menu</a></li>
+                    }
+                    <li><a asp-area="" asp-controller="Home" asp-action="About">FAQ</a></li>
+                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">Sitemap</a></li>
                 </ul>
                 <partial name="_LoginPartial" />
             </div>
