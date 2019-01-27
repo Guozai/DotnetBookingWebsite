@@ -1,7 +1,55 @@
-﻿@{
-    ViewBag.Title = "Staff Menu";
-    Layout = "_Layout";
+﻿@model IEnumerable<Slot>
+@{
+    ViewData["Title"] = "Index";
 }
 
-<h2>Staff Only!</h2>
+<h2>Staff Main Page</h2>
 
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(x => x.Room)
+            </th>
+            <th>
+                @Html.DisplayNameFor(x => x.StartTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(x => x.Staff)
+            </th>
+            <th>
+                @Html.DisplayNameFor(x => x.Student)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(x => item.Room.RoomID)
+            </td>
+            <td>
+                @Html.DisplayFor(x => item.StartTime)
+            </td>
+            <td>
+                <p>@Html.DisplayFor(x => item.Staff.StaffID)</p>
+                <p>@Html.DisplayFor(x => item.Staff.Name)</p>
+                <p>@Html.DisplayFor(x => item.Staff.Email)</p>
+            </td>
+            <td>
+                <p>@Html.DisplayFor(x => item.Student.StudentID)</p>
+                <p>@Html.DisplayFor(x => item.Student.Name)</p>
+                <p>@Html.DisplayFor(x => item.Student.Email)</p>
+            </td>
+            <td>
+                @Html.ActionLink("Delete", "Delete", new { RoomID = item.Room.RoomID, StartTime = item.StartTime }) |
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
