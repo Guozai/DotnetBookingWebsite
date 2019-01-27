@@ -53,11 +53,11 @@ namespace ASRSystem.Controllers
             return View(slot);
         }
 
-        // POST: Slots/Delete/5
+        // POST: Slots/Delete
         [HttpPost]
         [ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(string RoomID, DateTime? StartTime)
+        public async Task<IActionResult> DeleteConfirmed(string RoomID, DateTime StartTime)
         {
             var slot = await _context.Slot.FirstOrDefaultAsync(x => x.RoomID == RoomID && x.StartTime == StartTime);
             _context.Slot.Remove(slot);

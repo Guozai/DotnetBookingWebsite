@@ -36,9 +36,10 @@
         </dd>
     </dl>
 
+    @*https://stackoverflow.com/questions/22407594/how-to-correctly-use-html-actionlink-with-asp-net-mvc-4-areas*@
+
     <form asp-action="Delete">
-        <input type="hidden" asp-for="RoomID" />
-        <input type="submit" value="Delete" class="btn btn-default" /> |
+        @Html.ActionLink("Delete", "Delete", new { RoomID = Model.Room.RoomID, StartTime = Model.StartTime }) |
         <a asp-action="Index">Back to List</a>
     </form>
 </div>
