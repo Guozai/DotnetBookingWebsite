@@ -4,8 +4,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Asr.Data;
-using Microsoft.AspNetCore.Identity;
-using Asr.Models;
 
 namespace ASRSystem.Controllers
 {
@@ -47,10 +45,14 @@ namespace ASRSystem.Controllers
             {
                 try
                 {
-                    // Get current user
+                    // Get current user's userID
                     var userID = GetUserID(User.Identity.Name);
 
-                    if (slot.StudentID == null && userID.StartsWith('s'))
+                    var slotBooked = await _context.Slot.FirstOrDefaultAsync(
+                        x => x.StudentID == userID && x.StartTime.Date == StartTime.Date);
+
+                    if (slot.StudentID == null && userID.StartsWith('s') 
+                        && slotBooked == null)
                         slot.StudentID = userID;
                     else
                         slot.StudentID = null;
