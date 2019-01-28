@@ -31,7 +31,25 @@ namespace ASRSystem.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(slot);
+                // count the number of slots this staff created on this day
+                var countStaff = await _context.Slot.CountAsync(
+                    x => x.StaffID == slot.StaffID && x.StartTime.Date == slot.StartTime.Date);
+                // count the number of times this room is being used
+                var countRoom = await _context.Slot.CountAsync(
+                    x => x.RoomID == slot.RoomID && x.StartTime.Date == slot.StartTime.Date);
+
+                //Console.Write("-----------------------------------------------------------------\n");
+                //Console.Write("countStaff: ");
+                //Console.WriteLine(countStaff);
+                //Console.WriteLine(countRoom);
+                //Console.WriteLine(slot.StartTime.Date);
+                //Console.WriteLine(DateTime.Now.Date);
+
+                if (slot.StartTime.Date >= DateTime.Now.Date 
+                    && countStaff < 4 && countRoom < 2)
+                {
+                    _context.Add(slot);
+                }
                 await _context.SaveChangesAsync();
 
                 return RedirectToAction(nameof(Index));
@@ -60,7 +78,11 @@ namespace ASRSystem.Controllers
         public async Task<IActionResult> DeleteConfirmed(string RoomID, DateTime StartTime)
         {
             var slot = await _context.Slot.FirstOrDefaultAsync(x => x.RoomID == RoomID && x.StartTime == StartTime);
-            _context.Slot.Remove(slot);
+
+            if (slot.StudentID == null)
+            {
+                _context.Slot.Remove(slot);
+            }
             await _context.SaveChangesAsync();
 
             return RedirectToAction(nameof(Index));
