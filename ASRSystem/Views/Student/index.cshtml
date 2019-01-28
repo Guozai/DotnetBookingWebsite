@@ -25,27 +25,36 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
+        <tr>
+            <td>
+                @Html.DisplayFor(x => item.Room.RoomID)
+            </td>
+            <td>
+                @Html.DisplayFor(x => item.StartTime)
+            </td>
+            <td>
+                <p>@Html.DisplayFor(x => item.Staff.StaffID)</p>
+                <p>@Html.DisplayFor(x => item.Staff.Name)</p>
+                <p>@Html.DisplayFor(x => item.Staff.Email)</p>
+            </td>
+            <td>
+                <p>@Html.DisplayFor(x => item.Student.StudentID)</p>
+                <p>@Html.DisplayFor(x => item.Student.Name)</p>
+                <p>@Html.DisplayFor(x => item.Student.Email)</p>
+            </td>
+            @if (item.StudentID == null)
+            {
                 <td>
-                    @Html.DisplayFor(x => item.Room.RoomID)
+                    @Html.ActionLink("Booking", "Edit", new { RoomID = item.Room.RoomID, StartTime = item.StartTime }) |
                 </td>
+            }
+            else
+            {
                 <td>
-                    @Html.DisplayFor(x => item.StartTime)
+                    @Html.ActionLink("Unbooking", "Edit", new { RoomID = item.Room.RoomID, StartTime = item.StartTime }) |
                 </td>
-                <td>
-                    <p>@Html.DisplayFor(x => item.Staff.StaffID)</p>
-                    <p>@Html.DisplayFor(x => item.Staff.Name)</p>
-                    <p>@Html.DisplayFor(x => item.Staff.Email)</p>
-                </td>
-                <td>
-                    <p>@Html.DisplayFor(x => item.Student.StudentID)</p>
-                    <p>@Html.DisplayFor(x => item.Student.Name)</p>
-                    <p>@Html.DisplayFor(x => item.Student.Email)</p>
-                </td>
-                <td>
-                    @Html.ActionLink("Booking/Unbooking", "Edit", new { RoomID = item.Room.RoomID, StartTime = item.StartTime }) |
-                </td>
-            </tr>
+            }
+        </tr>
         }
     </tbody>
 </table>

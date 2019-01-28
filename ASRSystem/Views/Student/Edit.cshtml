@@ -5,30 +5,42 @@
 
 <h2>Booking / Unbooking</h2>
 
-<h4>Slot</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="RoomID" />
-            <input type="hidden" asp-for="StartTime" value="@Model.StartTime.ToString("yyyy/MM/dd HH:mm")" />
-            <div class="form-group">
-                <label asp-for="StudentID" class="control-label"></label>
-                <input asp-for="StudentID" class="form-control" />
-                <span asp-validation-for="StudentID" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-default" />
-            </div>
-        </form>
-    </div>
-</div>
-
+<h3>Are you sure you want to book/unbook this?</h3>
 <div>
-    <a asp-action="Index">Back to List</a>
+    <h4>Slot</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.RoomID)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.RoomID)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.StartTime)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.StartTime)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.StaffID)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.StaffID)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.StudentID)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.StudentID)
+        </dd>
+    </dl>
+
+    <form asp-action="Edit">
+        <input type="hidden" asp-for="RoomID" />
+        <input type="hidden" asp-for="StartTime" value="@Model.StartTime.ToString("yyyy/MM/dd HH:mm")" />
+        <input type="submit" value="Booking/Unbooking" class="btn btn-default" /> |
+        <a asp-action="Index">Back to List</a>
+    </form>
 </div>
 
-@section Scripts {
-    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
-}
