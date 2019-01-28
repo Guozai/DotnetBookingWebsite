@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Asr.Data;
+using Microsoft.AspNetCore.Identity;
+using Asr.Models;
 
 namespace ASRSystem.Controllers
 {
@@ -45,6 +47,13 @@ namespace ASRSystem.Controllers
             {
                 try
                 {
+                    // Get current user
+                    var userID = GetUserID(User.Identity.Name);
+
+                    if (slot.StudentID == null && userID.StartsWith('s'))
+                        slot.StudentID = userID;
+                    else
+                        slot.StudentID = null;
                     _context.Update(slot);
                     await _context.SaveChangesAsync();
                 }
@@ -59,6 +68,18 @@ namespace ASRSystem.Controllers
             }
 
             return View(slot);
+        }
+
+        private string GetUserID(string userEmail)
+        {
+            // Separate the input string by '@'
+            char[] seps = { '@' };
+            string[] parts = userEmail.Split(seps);
+
+            if (parts.Length == 2)
+                return parts[0];
+
+            return "";
         }
     }
 }

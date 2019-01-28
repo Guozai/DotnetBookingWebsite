@@ -1,4 +1,7 @@
 ﻿@model Asr.Models.Slot
+
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<User> UserManager
 @{
     ViewData["Title"] = "Edit";
 }
@@ -39,6 +42,7 @@
     <form asp-action="Edit">
         <input type="hidden" asp-for="RoomID" />
         <input type="hidden" asp-for="StartTime" value="@Model.StartTime.ToString("yyyy/MM/dd HH:mm")" />
+        @*<input type="hidden" asp-for="@UserManager.GetUserName(User)" />*@
         <input type="submit" value="Booking/Unbooking" class="btn btn-default" /> |
         <a asp-action="Index">Back to List</a>
     </form>
