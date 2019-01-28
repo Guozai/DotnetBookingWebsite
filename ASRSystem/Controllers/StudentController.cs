@@ -51,11 +51,14 @@ namespace ASRSystem.Controllers
                     var slotBooked = await _context.Slot.FirstOrDefaultAsync(
                         x => x.StudentID == userID && x.StartTime.Date == StartTime.Date);
 
-                    if (slot.StudentID == null && userID.StartsWith('s') 
-                        && slotBooked == null)
-                        slot.StudentID = userID;
-                    else
-                        slot.StudentID = null;
+                    if (userID.StartsWith('s'))
+                    {
+                        if (slot.StudentID == null && slotBooked == null)
+                            slot.StudentID = userID;
+                        if (slot.StudentID != null && slot.StudentID == userID)
+                            slot.StudentID = null;
+                    }
+
                     _context.Update(slot);
                     await _context.SaveChangesAsync();
                 }
