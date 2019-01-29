@@ -35,6 +35,8 @@ namespace Asr.Data
             await CreateUserAndEnsureUserHasRoleAsync(userManager, "e56789@rmit.edu.au", Constants.StaffRole);
             await CreateUserAndEnsureUserHasRoleAsync(userManager, "s1234567@student.rmit.edu.au", Constants.StudentRole);
             await CreateUserAndEnsureUserHasRoleAsync(userManager, "s4567890@student.rmit.edu.au", Constants.StudentRole);
+            await EnsureUserHasRoleAsync(userManager, "yiping.guo@gmail.com", Constants.StaffRole);
+            await EnsureUserHasRoleAsync(userManager, "s3177105@student.rmit.edu.au", Constants.StudentRole);
         }
 
         private static async Task CreateUserAndEnsureUserHasRoleAsync(
