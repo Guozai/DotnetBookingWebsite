@@ -1,9 +1,10 @@
 ﻿using System.Diagnostics;
 using System.Threading.Tasks;
-using Asr.Data;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
-using Asr.Models;
 using Microsoft.EntityFrameworkCore;
+using Asr.Data;
+using Asr.Models;
 
 namespace Asr.Controllers
 {
@@ -27,6 +28,19 @@ namespace Asr.Controllers
             //View(await _context.Slot.Include(s => s.Room).Include(s => s.Staff).Include(s => s.Student).ToListAsync());
         
         public async Task<IActionResult> Rooms() => View(await _context.Room.ToListAsync());
+
+        public async Task<IActionResult> RoomAvailability()
+        {
+            List<Room> rooms = new List<Room>();
+            foreach (var room in _context.Room)
+            {
+                var count = await _context.Slot.CountAsync(x => x.RoomID == room.RoomID);
+                if (count < 2)
+                    rooms.Add(room);
+            }
+
+            return View(rooms);
+        }
 
         public IActionResult FAQ()
         {
