@@ -45,8 +45,12 @@ namespace ASRSystem.Controllers
                 //Console.WriteLine(slot.StartTime.Date);
                 //Console.WriteLine(DateTime.Now.Date);
 
+                // If slot is not created in the past
+                // and staff has not created more than 4 slots in this day
+                // and room has not been used for more than twice in this day
                 if (slot.StartTime.Date >= DateTime.Now.Date 
-                    && countStaff < 4 && countRoom < 2)
+                    && countStaff < 4 && countRoom < 2 
+                    && slot.StartTime.Hour >= 9 && slot.StartTime.Hour <= 14)
                 {
                     _context.Add(slot);
                 }
