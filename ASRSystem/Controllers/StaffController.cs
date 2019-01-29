@@ -38,20 +38,16 @@ namespace ASRSystem.Controllers
                 var countRoom = await _context.Slot.CountAsync(
                     x => x.RoomID == slot.RoomID && x.StartTime.Date == slot.StartTime.Date);
 
-                //Console.Write("-----------------------------------------------------------------\n");
-                //Console.Write("countStaff: ");
-                //Console.WriteLine(countStaff);
-                //Console.WriteLine(countRoom);
-                //Console.WriteLine(slot.StartTime.Date);
-                //Console.WriteLine(DateTime.Now.Date);
-
                 // If slot is not created in the past
                 // and staff has not created more than 4 slots in this day
                 // and room has not been used for more than twice in this day
-                if (slot.StartTime.Date >= DateTime.Now.Date 
+                if (slot.StartTime >= DateTime.Now
                     && countStaff < 4 && countRoom < 2 
                     && slot.StartTime.Hour >= 9 && slot.StartTime.Hour <= 14)
                 {
+                    var time = slot.StartTime.Hour + ":00";
+                    slot.StartTime = DateTime.ParseExact(
+                        slot.StartTime.Date.ToString("yyyy/MM/dd") + " " + time, "yyyy/MM/dd HH:mm", null);
                     _context.Add(slot);
                 }
                 await _context.SaveChangesAsync();

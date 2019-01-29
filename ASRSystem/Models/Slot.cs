@@ -13,7 +13,7 @@ namespace Asr.Models
         public virtual Room Room { get; set; }
 
         [Required]
-        //[RegularExpression(@"^[]:[0][0] (am|pm|AM|PM)$", ErrorMessage = "Invalid Time. Must be between 9AM - 2PM")]
+        //[DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime StartTime { get; set; }
 
         [Required]
