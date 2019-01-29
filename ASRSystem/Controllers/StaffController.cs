@@ -27,27 +27,35 @@ namespace ASRSystem.Controllers
         // POST: Slots/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("RoomID,StartTime,StaffID,StudentID")] Slot slot)
+        public async Task<IActionResult> Create(string RoomID, DateTime StartTime)
         {
+            Slot slot = new Slot();
+
             if (ModelState.IsValid)
             {
+                var StaffID = GetUserID(User.Identity.Name);
+
                 // count the number of slots this staff created on this day
                 var countStaff = await _context.Slot.CountAsync(
-                    x => x.StaffID == slot.StaffID && x.StartTime.Date == slot.StartTime.Date);
+                    x => x.StaffID == StaffID && x.StartTime.Date == StartTime.Date);
                 // count the number of times this room is being used
                 var countRoom = await _context.Slot.CountAsync(
-                    x => x.RoomID == slot.RoomID && x.StartTime.Date == slot.StartTime.Date);
+                    x => x.RoomID == RoomID && x.StartTime.Date == StartTime.Date);
 
                 // If slot is not created in the past
                 // and staff has not created more than 4 slots in this day
                 // and room has not been used for more than twice in this day
-                if (slot.StartTime >= DateTime.Now
+                if (StartTime >= DateTime.Now
                     && countStaff < 4 && countRoom < 2 
-                    && slot.StartTime.Hour >= 9 && slot.StartTime.Hour <= 14)
+                    && StartTime.Hour >= 9 && StartTime.Hour <= 14)
                 {
-                    var time = slot.StartTime.Hour + ":00";
+                    slot.RoomID = RoomID;
+                    var time = StartTime.Hour + ":00";
                     slot.StartTime = DateTime.ParseExact(
-                        slot.StartTime.Date.ToString("yyyy/MM/dd") + " " + time, "yyyy/MM/dd HH:mm", null);
+                        StartTime.Date.ToString("yyyy/MM/dd") + " " + time, "yyyy/MM/dd HH:mm", null);
+                    slot.StaffID = StaffID;
+                    slot.StudentID = null;
+
                     _context.Add(slot);
                 }
                 await _context.SaveChangesAsync();
@@ -86,6 +94,18 @@ namespace ASRSystem.Controllers
             await _context.SaveChangesAsync();
 
             return RedirectToAction(nameof(Index));
+        }
+
+        private string GetUserID(string userEmail)
+        {
+            // Separate the input string by '@'
+            char[] seps = { '@' };
+            string[] parts = userEmail.Split(seps);
+
+            if (parts.Length == 2)
+                return parts[0];
+
+            return "";
         }
     }
 }
