@@ -1,0 +1,36 @@
+﻿@model IEnumerable<Staff>
+
+<h2>Staffs</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(x => x.StaffID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(x => x.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(x => x.Email)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var staff in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(x => staff.StaffID)
+                </td>
+                <td>
+                    <p>@Html.DisplayFor(x => staff.Name)</p>
+                </td>
+                <td>
+                    <p>@Html.DisplayFor(x => staff.Email)</p>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
