@@ -31,18 +31,19 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Rooms">Rooms</a></li>
                     @if (User.Identity.IsAuthenticated)
                     {
-                        <li><a asp-area="" asp-controller="Home" asp-action="Slots">Slots</a></li>
-
                         @if (User.Identity.Name.StartsWith('e'))
                         {
-                        <li><a asp-area="" asp-controller="Staff" asp-action="Index">Staff Menu</a></li>
+                            <li><a asp-area="" asp-controller="Home" asp-action="Staffs">Staffs</a></li>
+                            <li><a asp-area="" asp-controller="Home" asp-action="RoomAvailability">Room Availability</a></li>
+                            <li><a asp-area="" asp-controller="Staff" asp-action="Index">Slots</a></li>
                         }
                         @if (User.Identity.Name.StartsWith('s'))
                         {
-                        <li><a asp-area="" asp-controller="Student" asp-action="Index">Student Menu</a></li>
+                            <li><a asp-area="" asp-controller="Home" asp-action="Students">Students</a></li>
+                            <li><a asp-area="" asp-controller="Home" asp-action="StaffAvailability">Staff Availability</a></li>
+                            <li><a asp-area="" asp-controller="Student" asp-action="Index">Slots</a></li>
                         }
                     }
                     <li><a asp-area="" asp-controller="Home" asp-action="FAQ">FAQ</a></li>
