@@ -13,7 +13,7 @@ namespace Asr.Models
         public virtual Room Room { get; set; }
 
         [Required]
-        //[DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
+        //[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy HH:mm}")]
         public DateTime StartTime { get; set; }
 
         [Required]

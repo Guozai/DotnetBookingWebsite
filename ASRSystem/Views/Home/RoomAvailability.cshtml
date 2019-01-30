@@ -7,9 +7,8 @@
         <form asp-action="RoomAvail">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="StartTime" class="control-label"></label>
-                <input asp-for="StartTime" class="form-control" />
-                <span asp-validation-for="StartTime" class="text-danger"></span>
+                <label>Enter Date in dd/mm/yyyy format:</label><br />
+                @Html.TextBoxFor(x => x.StartTime, "{0:dd/MM/yyyy}")
             </div>
             <div class="form-group">
                 <input type="submit" value="Check" class="btn btn-default" />
