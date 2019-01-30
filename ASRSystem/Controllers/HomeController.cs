@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
@@ -29,17 +30,33 @@ namespace Asr.Controllers
         
         public async Task<IActionResult> Rooms() => View(await _context.Room.ToListAsync());
 
-        public async Task<IActionResult> RoomAvailability()
+        public async Task<IActionResult> Staffs() => View(await _context.Staff.ToListAsync());
+
+        public IActionResult RoomAvailability() => View();
+
+        [HttpPost]
+        [ActionName("RoomAvail")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RoomAvail(DateTime StartTime)
         {
             List<Room> rooms = new List<Room>();
             foreach (var room in _context.Room)
             {
-                var count = await _context.Slot.CountAsync(x => x.RoomID == room.RoomID);
+                var count = await _context.Slot.CountAsync(
+                    x => x.RoomID == room.RoomID && x.StartTime.Date == StartTime.Date);
                 if (count < 2)
                     rooms.Add(room);
             }
+            return RedirectToAction(nameof(Rooms));
 
-            return View(rooms);
+            //return View(rooms);
+        }
+
+        public async Task<IActionResult> Students() => View(await _context.Student.ToListAsync());
+
+        public async Task<IActionResult> StaffAvailability()
+        {
+            return View();
         }
 
         public IActionResult FAQ()
