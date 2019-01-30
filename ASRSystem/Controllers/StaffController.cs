@@ -63,6 +63,8 @@ namespace ASRSystem.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
+            //ViewBag.Rooms = new SelectList();
+
             return View(slot);
         }
 
