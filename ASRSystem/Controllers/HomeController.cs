@@ -47,16 +47,30 @@ namespace Asr.Controllers
                 if (count < 2)
                     rooms.Add(room);
             }
-            return RedirectToAction(nameof(Rooms));
+            //RedirectToAction(nameof(Rooms));
 
-            //return View(rooms);
+            return View(rooms);
         }
 
         public async Task<IActionResult> Students() => View(await _context.Student.ToListAsync());
 
-        public async Task<IActionResult> StaffAvailability()
+        public IActionResult StaffAvailability() => View();
+
+        [HttpPost]
+        [ActionName("StaffAvail")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> StaffAvail(DateTime StartTime)
         {
-            return View();
+            List<Staff> staffs = new List<Staff>();
+            foreach (var staff in _context.Staff)
+            {
+                var count = await _context.Slot.CountAsync(
+                    x => x.StaffID == staff.StaffID && x.StartTime.Date == StartTime.Date);
+                if (count < 4)
+                    staffs.Add(staff);
+            }
+
+            return View(staffs);
         }
 
         public IActionResult FAQ()
