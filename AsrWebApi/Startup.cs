@@ -25,6 +25,7 @@ namespace AsrWebApi
                 options.UseSqlServer(Configuration.GetConnectionString("MvcMovieContext")));
 
             services.AddTransient<RoomManager>();
+            services.AddTransient<SlotManager>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
