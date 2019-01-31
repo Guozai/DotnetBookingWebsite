@@ -2,9 +2,11 @@
 // And https://stackoverflow.com/questions/32138022/how-to-map-composite-key-in-crud-functionality
 
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Asr.Data;
 using Asr.Models;
@@ -22,7 +24,15 @@ namespace ASRSystem.Controllers
         public async Task<IActionResult> Index() => View(await _context.Slot.ToListAsync());
 
         // GET: Slots/Create
-        public IActionResult Create() => View();
+        public async Task<IActionResult> Create()
+        {
+            var rooms = _context.Room.Select(x => x.RoomID).Distinct().OrderBy(x => x);
+
+            return View(new StaffCreateViewModel
+            {
+                RoomIDs = new SelectList(await rooms.ToListAsync())
+            });
+        }
 
         // POST: Slots/Create
         [HttpPost]
