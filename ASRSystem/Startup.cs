@@ -8,7 +8,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Asr.Data;
 using Asr.Models;
-using Asr.Models.DataManager;
 
 namespace Asr
 {
@@ -43,8 +42,6 @@ namespace Asr
                 googleOptions.ClientId = Configuration["Authentication:Google:ClientId"];
                 googleOptions.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
             });
-
-            services.AddTransient<RoomManager>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
