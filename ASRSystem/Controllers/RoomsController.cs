@@ -1,18 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Asr.Data;
 using Asr.Models;
 using Asr.Models.DataManager;
 
 namespace Asr.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]
     public class RoomsController : Controller
     {
         private readonly RoomManager _repo;
@@ -30,14 +23,14 @@ namespace Asr.Controllers
         }
 
         // GET: api/Rooms/1
-        [HttpGet("{id}")]
+        [HttpGet("{RoomID}")]
         public Room Get(string RoomID)
         {
             return _repo.Get(RoomID);
         }
 
         // PUT: api/Rooms
-        [HttpPut("{id}")]
+        [HttpPut("{RoomID}")]
         public void Put([FromBody] Room room)
         {
             _repo.Add(room);
@@ -51,7 +44,7 @@ namespace Asr.Controllers
         }
 
         // DELETE: api/Rooms/1
-        [HttpDelete("{id}")]
+        [HttpDelete("{RoomID}")]
         public string Delete(string RoomID)
         {
             return _repo.Delete(RoomID);

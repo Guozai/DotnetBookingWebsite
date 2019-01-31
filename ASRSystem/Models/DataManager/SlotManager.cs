@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Asr.Models.DataManager
 {
-    public class MovieManager
+    public class SlotManager
     {
     }
 }
