@@ -7,134 +7,54 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Asr.Data;
 using Asr.Models;
+using Asr.Models.DataManager;
 
 namespace Asr.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class RoomsController : ControllerBase
+    public class RoomsController : Controller
     {
-        private readonly AsrContext _context;
+        private readonly RoomManager _repo;
 
-        public RoomsController(AsrContext context)
+        public RoomsController(RoomManager repo)
         {
-            _context = context;
+            _repo = repo;
         }
 
         // GET: api/Rooms
         [HttpGet]
-        public IEnumerable<Room> GetRoom()
+        public IEnumerable<Room> Get()
         {
-            return _context.Room;
+            return _repo.GetAll();
         }
 
-        // GET: api/Rooms/5
+        // GET: api/Rooms/1
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetRoom([FromRoute] string id)
+        public Room Get(string RoomID)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var room = await _context.Room.FindAsync(id);
-
-            if (room == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(room);
+            return _repo.Get(RoomID);
         }
 
-        // PUT: api/Rooms/5
+        // PUT: api/Rooms
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutRoom([FromRoute] string id, [FromBody] Room room)
+        public void Put([FromBody] Room room)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            if (id != room.RoomID)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(room).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!RoomExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            _repo.Add(room);
         }
 
         // POST: api/Rooms
         [HttpPost]
-        public async Task<IActionResult> PostRoom([FromBody] Room room)
+        public void Post([FromBody] Room room)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            _context.Room.Add(room);
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                if (RoomExists(room.RoomID))
-                {
-                    return new StatusCodeResult(StatusCodes.Status409Conflict);
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return CreatedAtAction("GetRoom", new { id = room.RoomID }, room);
+            _repo.Update(room.RoomID, room);
         }
 
-        // DELETE: api/Rooms/5
+        // DELETE: api/Rooms/1
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteRoom([FromRoute] string id)
+        public string Delete(string RoomID)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var room = await _context.Room.FindAsync(id);
-            if (room == null)
-            {
-                return NotFound();
-            }
-
-            _context.Room.Remove(room);
-            await _context.SaveChangesAsync();
-
-            return Ok(room);
-        }
-
-        private bool RoomExists(string id)
-        {
-            return _context.Room.Any(e => e.RoomID == id);
+            return _repo.Delete(RoomID);
         }
     }
 }
