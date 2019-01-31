@@ -4,14 +4,43 @@
 <h2>@ViewData["Title"]</h2>
 <h3>@ViewData["Message"]</h3>
 
-<address>
-    One Microsoft Way<br />
-    Redmond, WA 98052-6399<br />
-    <abbr title="Phone">P:</abbr>
-    425.555.0100
-</address>
-
-<address>
-    <strong>Support:</strong> <a href="mailto:Support@example.com">Support@example.com</a><br />
-    <strong>Marketing:</strong> <a href="mailto:Marketing@example.com">Marketing@example.com</a>
-</address>
+<ul class="siteMap">
+    <li>
+        <a href="/" title="Home">Home</a>
+        <ul>
+            @if (User.Identity.IsAuthenticated)
+            {
+                @if (User.Identity.Name.StartsWith('e'))
+                {
+                    <li>
+                        <a href="/Home/Staffs" title="Staffs">Staffs</a>
+                    </li>
+                    <li>
+                        <a href="/Home/RoomAvailability" title="Room Availability">Room Availability</a>
+                    </li>
+                    <li>
+                        <a href="/Staff/Index" title="Slots">Slots</a>
+                    </li>
+                }
+                @if (User.Identity.Name.StartsWith('s'))
+                {
+                    <li>
+                        <a href="/Home/Students" title="Students">Students</a>
+                    </li>
+                    <li>
+                        <a href="/Home/StaffAvailability" title="Staff Availability">Staff Availability</a>
+                    </li>
+                    <li>
+                        <a href="/Student/Index" title="Slots">Slots</a>
+                    </li>
+                }
+            }
+            <li>
+                <a href="/Home/FAQ" title="FAQ">FAQ</a>
+            </li>
+            <li>
+                <a href="/Home/Sitemap" title="Sitemap">Sitemap</a>
+            </li>
+        </ul>
+    </li>
+</ul>

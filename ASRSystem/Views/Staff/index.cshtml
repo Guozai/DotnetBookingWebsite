@@ -47,7 +47,7 @@
                 <p>@Html.DisplayFor(x => item.Student.Email)</p>
             </td>
             <td>
-                @Html.ActionLink("Delete", "Delete", new { RoomID = item.Room.RoomID, StartTime = item.StartTime }) |
+                | @Html.ActionLink("Remove", "Delete", new { RoomID = item.Room.RoomID, StartTime = item.StartTime }) |
             </td>
         </tr>
         }
