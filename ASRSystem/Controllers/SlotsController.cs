@@ -28,8 +28,8 @@ namespace Asr.Controllers
         }
 
         // GET: api/slots/1
-        [HttpGet]
-        [Route("api/slots/{RoomID}/{StartTime}")]
+        [HttpGet("{RoomID}/{StartTime}")]
+        //[Route("api/slots/{RoomID}/{StartTime}")]
         public Slot Get(string RoomID, DateTime StartTime)
         {
             _context.ChangeTracker.LazyLoadingEnabled = false;
