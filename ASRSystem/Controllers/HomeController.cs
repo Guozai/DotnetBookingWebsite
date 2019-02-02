@@ -73,12 +73,7 @@ namespace Asr.Controllers
             return View(staffs);
         }
 
-        public IActionResult FAQ()
-        {
-            ViewData["Message"] = "Your application description page.";
-
-            return View();
-        }
+        public IActionResult FAQ() => View();
 
         public IActionResult Sitemap() => View();
 
