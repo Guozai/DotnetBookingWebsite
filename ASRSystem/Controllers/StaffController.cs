@@ -24,15 +24,16 @@ namespace ASRSystem.Controllers
         public async Task<IActionResult> Index() => View(await _context.Slot.ToListAsync());
 
         // GET: Slots/Create
-        public async Task<IActionResult> Create()
-        {
-            var rooms = _context.Room.Select(x => x.RoomID).Distinct().OrderBy(x => x);
+        //public async Task<IActionResult> Create()
+        //{
+        //    var rooms = _context.Room.Select(x => x.RoomID).Distinct().OrderBy(x => x);
 
-            return View(new StaffCreateViewModel
-            {
-                RoomIDs = new SelectList(await rooms.ToListAsync())
-            });
-        }
+        //    return View(new StaffCreateViewModel
+        //    {
+        //        RoomIDs = new SelectList(await rooms.ToListAsync())
+        //    });
+        //}
+        public IActionResult Create() => View();
 
         // POST: Slots/Create
         [HttpPost]
