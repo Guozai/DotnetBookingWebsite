@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Asr.Data;
 using Asr.Models;
+using System.Linq;
 
 namespace Asr.Controllers
 {
@@ -28,7 +29,7 @@ namespace Asr.Controllers
         //public async Task<IActionResult> Index() => View(await _context.Slot.ToListAsync());
             //View(await _context.Slot.Include(s => s.Room).Include(s => s.Staff).Include(s => s.Student).ToListAsync());
         
-        public async Task<IActionResult> Rooms() => View(await _context.Room.ToListAsync());
+        public async Task<IActionResult> Rooms() => View(await _context.Room.OrderByDescending(x => x).ToListAsync());
 
         public async Task<IActionResult> Staffs() => View(await _context.Staff.ToListAsync());
 
