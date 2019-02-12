@@ -53,10 +53,16 @@ namespace ASRSystem.Controllers
 
                     if (userID.StartsWith('s'))
                     {
-                        if (slot.StudentID == null && slotBooked == null)
-                            slot.StudentID = userID;
-                        if (slot.StudentID != null && slot.StudentID == userID)
-                            slot.StudentID = null;
+                        if (slotBooked == null)
+                        {
+                            if (slot.StudentID == null)
+                                slot.StudentID = userID;
+                        }
+                        else
+                        {
+                            if (slot.StudentID != null && slot.StudentID == userID)
+                                slot.StudentID = null;
+                        }
                     }
 
                     _context.Update(slot);
